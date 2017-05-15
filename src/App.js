@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {Form} from "./components/form";
 
 class App extends Component {
   render() {
@@ -7,6 +8,7 @@ class App extends Component {
         <p>
           Awesome chat!
         </p>
+        <Form />
       </div>
     );
   }
