@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 export const MessageList = ({messages}) =>
   <div className="message-list">
-    {messages.map(message => <Message data={message} />)}
+    {messages.map(message => <Message key={message.id} data={message} />)}
   </div>;
 
 MessageList.propTypes = {
