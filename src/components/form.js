@@ -1,7 +1,19 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-export const Form = ({sendMessage}) =>
+export const Form = ({messageValue, update, sendMessage}) =>
   <div className="form">
-    <input type="text" placeholder="message" />
-    <button>Send message</button>
-  </div>
+    <input
+      onChange={update}
+      name="message"
+      value={messageValue}
+      type="text"
+      placeholder="message" />
+    <button onClick={sendMessage}>Send message</button>
+  </div>;
+
+Form.propTypes = {
+  messageValue: PropTypes.string.isRequired,
+  update: PropTypes.func.isRequired,
+  sendMessage: PropTypes.func.isRequired,
+};
