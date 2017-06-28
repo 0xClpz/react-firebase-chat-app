@@ -5,7 +5,7 @@ isLoggedIn(){
 
 // Types
 type Message {
-    createdAt: Timestamp
+    createdAt: Number
     message: MessageContent
     name: String
     picture: String
@@ -14,12 +14,6 @@ type Message {
 type MessageContent extends String {
     validate(){
         this.length > 0 && this.length <= 140
-    }
-}
-
-type Timestamp extends Number {
-    validate(){
-        this == now
     }
 }
 
@@ -33,10 +27,13 @@ path / {
     }
 }
 
-path /messages/{message_id} is Message {
+path /messages {
     read(){
         isLoggedIn()
     }
+}
+
+path /messages/{message_id} is Message {
     write(){
         isLoggedIn()
     }
