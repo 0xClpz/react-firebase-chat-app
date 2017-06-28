@@ -5,33 +5,30 @@ import {MessageList} from "./components/MessageList";
 import {UserProfile} from "./components/UserProfile";
 
 import './App.css';
+import {Login} from "./components/Login";
 
 const updateState = (name, value) => state => ({
   ...state,
   [name]: value
 });
 
-const ObjectsToArray = obj =>
-  Object.keys(obj)
-    .map(id => ({id, ...obj[id]}));
-
 class App extends Component {
   constructor(props){
     super(props);
     this.state = {
-      name: 'Guest',
-      picture: 'https://hackages.io/static/media/m041074.a59d6a20.jpg',
+      displayName: 'Guest',
+      photoURL: 'https://hackages.io/static/media/m041074.a59d6a20.jpg',
       message: '',
-      messages: []
     }
   }
 
   componentDidMount(){
-    firebase.database().ref('/messages').on('value', snapshot => {
-      const messages =
-        [snapshot.val() || {}]
-          .map(ObjectsToArray)[0];
-      this.setState(state => ({...state, messages}));
+    firebase.auth().onAuthStateChanged((user) => {
+      this.setState(state => ({
+        loggedIn: !!user,
+        displayName: user ? user.displayName : state.displayName,
+        photoURL: user ? user.photoURL : state.photoURL
+      }));
     });
   }
 
@@ -40,7 +37,7 @@ class App extends Component {
   };
 
   sendMessage = () => {
-    const {name, picture, message} = this.state;
+    const {displayName: name, photoURL: picture, message} = this.state;
     const createdAt = Date.now();
     firebase.database().ref('/messages').push({name, picture, message, createdAt});
     this.setState(state => ({
@@ -50,18 +47,24 @@ class App extends Component {
   };
 
   render() {
-    const {name, picture, message} = this.state;
+    const {displayName, photoURL, message, loggedIn} = this.state;
     return (
       <div className="app-container">
-        <UserProfile
-          profile={{name, picture}}
-          update={this.update}/>
-        <MessageList
-          messages={this.state.messages} />
-        <Form
-          messageValue={message}
-          update={this.update}
-          sendMessage={this.sendMessage} />
+        {!loggedIn ?
+          <Login />
+          :
+          <div>
+            <UserProfile
+              profile={{displayName, photoURL}}
+              update={this.update}/>
+            <MessageList
+              messages={this.state.messages} />
+            <Form
+              messageValue={message}
+              update={this.update}
+              sendMessage={this.sendMessage} />
+          </div>
+        }
       </div>
     );
   }
