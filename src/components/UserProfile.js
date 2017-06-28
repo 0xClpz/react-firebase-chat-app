@@ -1,24 +1,19 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
-const toggleEditName = state => ({
+const toggleKey = key => state => ({
   ...state,
-  editingName: !state.editingName
+  [key]: !state[key]
 });
 
-const toggleEditPicture = state => ({
-  ...state,
-  editingPicture: !state.editingPicture
-});
+const toggleEditName = toggleKey('editingName');
+const toggleEditPicture = toggleKey('editingPicture');
 
 export class UserProfile extends Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      editingName: false,
-      editingPicture: false,
-    }
-  }
+  state = {
+    editingPicture: false,
+    editingName: false,
+  };
 
   render(){
     const {profile} = this.props;
