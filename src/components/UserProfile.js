@@ -27,6 +27,7 @@ export class UserProfile extends Component {
         <div className="profile-picture">
           <img
             src={profile.picture}
+            alt="User profile"
             onDoubleClick={() => this.setState(toggleEditPicture)}/>
           {this.state.editingPicture &&
             <span>
