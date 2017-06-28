@@ -1,0 +1,43 @@
+// Helper functions
+isLoggedIn(){
+    auth != null
+}
+
+// Types
+type Message {
+    createdAt: Timestamp
+    message: MessageContent
+    name: String
+    picture: String
+}
+
+type MessageContent extends String {
+    validate(){
+        this.length > 0 && this.length <= 140
+    }
+}
+
+type Timestamp extends Number {
+    validate(){
+        this == now
+    }
+}
+
+// Security Rules
+path / {
+    read(){
+        false
+    }
+    write(){
+        false
+    }
+}
+
+path /messages/{message_id} is Message {
+    read(){
+        isLoggedIn()
+    }
+    write(){
+        isLoggedIn()
+    }
+}
